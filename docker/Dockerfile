@@ -2,7 +2,7 @@
 # charlesdias/stm32_gtest
 #
 # Docker build
-# doker build -t charlesdias/stm32_gtest:<version> -t charlesdias/stm32_gtest:latest .
+# docker build -t charlesdias/stm32_gtest:<version> -t charlesdias/stm32_gtest:latest .
 #
 # Docker push
 # docker push charlesdias/stm32_gtest --all-tags
@@ -16,7 +16,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Download Linux support tools
 RUN apt-get update && apt-get clean && apt-get install -y \
-      build-essential git wget python3 doxygen graphviz gcovr lcov
+      build-essential git wget python3 doxygen graphviz gcovr lcov \
+      python3-pip flawfinder \
+      && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Lizard
+RUN pip3 install lizard
 
 # Get and install the CMake
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.sh \

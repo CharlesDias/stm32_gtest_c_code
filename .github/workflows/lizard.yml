@@ -1,0 +1,31 @@
+# https://github.com/terryyin/lizard
+name: Lizard
+
+on: [push]
+
+jobs:
+  lizard:
+    name: Lizard
+
+    runs-on: ubuntu-latest
+    container:
+      image: charlesdias/stm32_gtest:latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Lizard scan
+        run: lizard --CCN 15 --length 1000 --arguments 100 ./source/nucleo-f446ze-library/Libraries > lizard-report.txt
+
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Archive production artifacts
+          path: lizard-report.txt
+          retention-days: 90
