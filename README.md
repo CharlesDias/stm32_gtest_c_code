@@ -7,7 +7,7 @@
 This is a sample project for testing C code for STM32 microcontrollers using the Google Test Framework. Some topics covered:
 
 * Sample project using the NUCLEO-F446ZE board.
-* Library, executable and test code separated in distinct folders.
+* Distinct folders for library, executable, and test code.
 * Use of STM32CubeIDE for building and compiling the application project.
 * Use of CMake for building the test code.
 * Testing C code via Google Test Framework.
@@ -129,3 +129,8 @@ Open the STM32CubeIDE and import this project.
 Build and load the firmware on NUCLEO-F446ZE board. See the expected output.
 
 ![STM32 project](docs/images/stm32_gtest.gif "STM32 project")
+
+## Improvement suggestions
+
+* Build the application project via CMake.
+* Add Doxygen configuration.
