@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "gpio.h"
+#include "Drivers/Include/gpio.h"
 
 /* USER CODE END Includes */
 

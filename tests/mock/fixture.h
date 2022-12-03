@@ -3,7 +3,7 @@
 
 #include "stm32f446xx_override.h"
 #include "stm32f4xx_hal_gpio_override.h"
-#include "gpio.h"
+#include "Drivers/Include/gpio.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

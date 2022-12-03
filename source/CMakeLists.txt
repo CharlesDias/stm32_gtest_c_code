@@ -1,1 +1,1 @@
-add_subdirectory(stm32-cube-ide)
+add_subdirectory(nucleo-f446ze-library)
