@@ -37,5 +37,5 @@ enable_testing()
 # Variables name for target
 set(LIBRARY_NAME library_gpio)
 
-add_subdirectory(stm32-cube-ide)
+add_subdirectory(source)
 add_subdirectory(tests)
