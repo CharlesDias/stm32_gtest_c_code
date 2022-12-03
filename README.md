@@ -10,12 +10,14 @@
 This is a sample project for testing C code for STM32 microcontrollers using the Google Test Framework. Some topics covered:
 
 * Sample project using the NUCLEO-F446ZE board.
+* Embedded system without RTOS (bare metal).
 * Distinct folders for library, executable, and test code.
 * Use of STM32CubeIDE for building and compiling the application project.
 * Use of CMake for building the test code.
 * Testing C code via Google Test Framework.
 * Use GMock for mocking the STM32 HAL functions.
 * Code coverage with Github Actions and [Codecov](https://codecov.io).
+* Code quality analysis with Lizard and Flawfinder tools.
 * Use of Docker container.
 
 ## Project structure
@@ -135,5 +137,7 @@ Build and load the firmware on NUCLEO-F446ZE board. See the expected output.
 
 ## Improvement suggestions
 
+* Add some function example to increase the CCN (cyclomatic complexity number).
+* Add some function example with security weaknesses to test the Flawfinder.
 * Build the application project via CMake.
 * Add Doxygen configuration.

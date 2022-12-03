@@ -41,7 +41,7 @@ TEST_F(GpioUnitTest, GPIO_Constructor_should_initialize_struct_field)
    GpioPort_t *LedPort = (GpioPort_t *)LD1_GPIO_Port;
    GpioPin_t LedPin = LD1_Pin;
 
-   GPIO_Constructor(&Led, LedPort, LedPin);
+   GPIO_Initialize(&Led, LedPort, LedPin);
 
    ASSERT_EQ(true, Led.init);
    ASSERT_EQ(LedPort, Led.port);
@@ -59,8 +59,8 @@ TEST_F(GpioUnitTest, GPIO_WritePin_should_CallHAL_GPIO_WritePin_when_PassedValid
    EXPECT_CALL(*_halMock, HAL_GPIO_WritePin((GPIO_TypeDef *)expectPort, expectedPin, (GPIO_PinState)expectStateSet)).Times(1);
    EXPECT_CALL(*_halMock, HAL_GPIO_WritePin((GPIO_TypeDef *)expectPort, expectedPin, (GPIO_PinState)expectStateReset)).Times(1);
 
-   GPIO_WritePin(Led, GPIO_STATE_SET);
-   GPIO_WritePin(Led, GPIO_STATE_RESET);
+   GPIO_WritePin(&Led, GPIO_STATE_SET);
+   GPIO_WritePin(&Led, GPIO_STATE_RESET);
 }
 
 TEST_F(GpioUnitTest, GPIO_ReadPin_should_CallHAL_GPIO_ReadPin_when_PassedValidParameters)
@@ -73,10 +73,10 @@ TEST_F(GpioUnitTest, GPIO_ReadPin_should_CallHAL_GPIO_ReadPin_when_PassedValidPa
 
    EXPECT_CALL(*_halMock, HAL_GPIO_ReadPin((GPIO_TypeDef *)expectedPort, expectedPin)).Times(2).WillOnce(Return((GPIO_PinState)expectStateSet)).WillOnce(Return((GPIO_PinState)expectStateReset));
 
-   GpioState_t actualStateSet = GPIO_ReadPin(Led);
+   GpioState_t actualStateSet = GPIO_ReadPin(&Led);
    EXPECT_EQ(expectStateSet, actualStateSet);
 
-   GpioState_t actualStateReset = GPIO_ReadPin(Led);
+   GpioState_t actualStateReset = GPIO_ReadPin(&Led);
    EXPECT_EQ(expectStateReset, actualStateReset);
 }
 
@@ -88,5 +88,5 @@ TEST_F(GpioUnitTest, GPIO_TogglePin_should_CallHAL_GPIO_TogglePin_when_PassedVal
 
    EXPECT_CALL(*_halMock, HAL_GPIO_TogglePin((GPIO_TypeDef *)expectedPort, expectedPin)).Times(1);
 
-   GPIO_TogglePin(Led);
+   GPIO_TogglePin(&Led);
 }

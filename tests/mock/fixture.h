@@ -22,10 +22,10 @@ class HAL_MOCK
       MOCK_METHOD(GPIO_PinState, HAL_GPIO_ReadPin, (GPIO_TypeDef * GPIOx, uint16_t GPIO_Pin));
 
       // GPIO Functions. It has to add all functions. Otherwise, the compiler maybe give the crazy error of "multiple definition of name_of_function"
-      MOCK_METHOD(void, GPIO_Constructor, (Gpio_t *const me, GpioPort_t port, GpioPin_t pin));
-      MOCK_METHOD(void, GPIO_TogglePin, (const Gpio_t me));
-      MOCK_METHOD(void, GPIO_Write, (const Gpio_t me, GpioState_t state));
-      MOCK_METHOD(GpioState_t, GPIO_Read, (const Gpio_t me));
+      MOCK_METHOD(void, GPIO_Initialize, (Gpio_t *const me, GpioPort_t port, GpioPin_t pin));
+      MOCK_METHOD(void, GPIO_TogglePin, (const Gpio_t * const me));
+      MOCK_METHOD(void, GPIO_Write, (const Gpio_t * const me, GpioState_t state));
+      MOCK_METHOD(GpioState_t, GPIO_Read, (const Gpio_t * const me));
 
       // More mocks can be added here
 };
