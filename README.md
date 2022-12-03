@@ -18,6 +18,7 @@ This is a sample project for testing C code for STM32 microcontrollers using the
 * Use GMock for mocking the STM32 HAL functions.
 * Code coverage with Github Actions and [Codecov](https://codecov.io).
 * Code quality analysis with Lizard and Flawfinder tools.
+* Assert verification and prints the failures via huart3.
 * Use of Docker container.
 
 ## Project structure
