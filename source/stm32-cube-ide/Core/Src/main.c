@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bsp.h"
 #include "Drivers/Include/gpio.h"
 
 /* USER CODE END Includes */
@@ -95,8 +96,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // Sample code to use Library Gpio
+  BSP_Initialize();
+
   Gpio_t LedGreen = {0};
-  GPIO_Initialize(&LedGreen, (GpioPort_t *)LD1_GPIO_Port, LD1_Pin);
+  GPIO_Initialize(&LedGreen, (GpioPort_t *)NULL, LD1_Pin);
 
   Gpio_t LedBlue = {0};
   GPIO_Initialize(&LedBlue, (GpioPort_t *)LD2_GPIO_Port, LD2_Pin);
