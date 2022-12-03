@@ -11,7 +11,7 @@
 
 void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin)
 {
-   assert_param(me != NULL || port != NULL);
+   assert_param(me != NULL && port != NULL);
    assert_param(!me->init);
 
    me->init = true;
@@ -21,14 +21,14 @@ void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin)
 
 void GPIO_TogglePin(const Gpio_t * const me)
 {
-   assert_param(me != NULL || me->init);
+   assert_param(me != NULL && me->init);
 
    HAL_GPIO_TogglePin((GPIO_TypeDef *)me->port, me->pin);
 }
 
 void GPIO_WritePin(const Gpio_t * const me, GpioState_t state)
 {
-   assert_param(me != NULL || me->init);
+   assert_param(me != NULL && me->init);
 
    if(state == GPIO_STATE_SET)
    {
@@ -42,7 +42,7 @@ void GPIO_WritePin(const Gpio_t * const me, GpioState_t state)
 
 GpioState_t GPIO_ReadPin(const Gpio_t * const me)
 {
-   assert_param(me != NULL || me->init);
+   assert_param(me != NULL && me->init);
 
    if(HAL_GPIO_ReadPin((GPIO_TypeDef *)me->port, me->pin))
    {
