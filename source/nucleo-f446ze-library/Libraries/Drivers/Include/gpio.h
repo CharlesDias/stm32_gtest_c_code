@@ -33,10 +33,10 @@ typedef struct Gpio
 }Gpio_t;
 
 
-void GPIO_Constructor(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin);
-void GPIO_TogglePin(const Gpio_t me);
-void GPIO_WritePin(const Gpio_t me, GpioState_t state);
-GpioState_t GPIO_ReadPin(const Gpio_t me);
+void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin);
+void GPIO_TogglePin(const Gpio_t * const me);
+void GPIO_WritePin(const Gpio_t * const me, GpioState_t state);
+GpioState_t GPIO_ReadPin(const Gpio_t * const me);
 
 
 #ifdef __cplusplus

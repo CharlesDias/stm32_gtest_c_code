@@ -2,6 +2,11 @@
 set(SOURCE_FOLDER_PATH "${CMAKE_SOURCE_DIR}/stm32-cube-ide")
 set(TEST_FOLDER_PATH "${CMAKE_SOURCE_DIR}/tests")
 
+set(ASSERT_MOCK AssertMock)
+add_library(${ASSERT_MOCK}
+   ${TEST_FOLDER_PATH}/mock/assert_mock.c
+) 
+
 set(UNIT_TEST UnitTest)
 add_executable( ${UNIT_TEST}
    ${TEST_FOLDER_PATH}/unit/unit_hello_test.cpp
@@ -15,6 +20,7 @@ target_include_directories( ${UNIT_TEST} PRIVATE
 
 target_link_libraries( ${UNIT_TEST} PUBLIC
    ${LIBRARY_NAME}
+   ${ASSERT_MOCK}
    GTest::gmock_main
 )
 

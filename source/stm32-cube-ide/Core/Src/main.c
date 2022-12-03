@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bsp.h"
 #include "Drivers/Include/gpio.h"
 
 /* USER CODE END Includes */
@@ -95,14 +96,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // Sample code to use Library Gpio
+  BSP_Initialize();
+
   Gpio_t LedGreen = {0};
-  GPIO_Constructor(&LedGreen, (GpioPort_t *)LD1_GPIO_Port, LD1_Pin);
+  GPIO_Initialize(&LedGreen, (GpioPort_t *)NULL, LD1_Pin);
 
   Gpio_t LedBlue = {0};
-  GPIO_Constructor(&LedBlue, (GpioPort_t *)LD2_GPIO_Port, LD2_Pin);
+  GPIO_Initialize(&LedBlue, (GpioPort_t *)LD2_GPIO_Port, LD2_Pin);
 
   Gpio_t LedRed = {0};
-  GPIO_Constructor(&LedRed, (GpioPort_t *)LD3_GPIO_Port, LD3_Pin);
+  GPIO_Initialize(&LedRed, (GpioPort_t *)LD3_GPIO_Port, LD3_Pin);
 
   /* USER CODE END 2 */
 
@@ -113,12 +116,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	GPIO_TogglePin(LedGreen);
-	GPIO_WritePin(LedRed, GPIO_STATE_RESET);
+	GPIO_TogglePin(&LedGreen);
+	GPIO_WritePin(&LedRed, GPIO_STATE_RESET);
 	HAL_Delay(500);
 
-	GPIO_TogglePin(LedGreen);
-	GPIO_WritePin(LedRed, GPIO_STATE_SET);
+	GPIO_TogglePin(&LedGreen);
+	GPIO_WritePin(&LedRed, GPIO_STATE_SET);
 	HAL_Delay(500);
   }
   /* USER CODE END 3 */
@@ -321,6 +324,9 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+   printf("assert_failed: file %s on line %lu\r\n", file, line);
+
+   Error_Handler();
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
