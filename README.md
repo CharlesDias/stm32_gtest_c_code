@@ -3,6 +3,8 @@
 ![License](https://camo.githubusercontent.com/890acbdcb87868b382af9a4b1fac507b9659d9bf/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667)
 [![Test](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/unit-test.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/unit-test.yml)
 [![codecov](https://codecov.io/gh/CharlesDias/stm32_gtest_c_code/branch/main/graph/badge.svg)](https://codecov.io/gh/CharlesDias/stm32_gtest_c_code)
+[![Lizard](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/lizard.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/lizard.yml)
+[![Flawfinder](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/flawfinder.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/flawfinder.yml)
 
 This is a sample project for testing C code for STM32 microcontrollers using the Google Test Framework. Some topics covered:
 
