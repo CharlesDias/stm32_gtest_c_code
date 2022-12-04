@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(UnitTestsHello, BasicAssertions_1)
+TEST(HelloUnitTests, BasicAssertions_1)
 {
    // Expect to br true
    EXPECT_TRUE(1);
@@ -10,7 +10,7 @@ TEST(UnitTestsHello, BasicAssertions_1)
    EXPECT_FALSE(0);
 }
 
-TEST(UnitTestsHello, BasicAssertions_2)
+TEST(HelloUnitTests, BasicAssertions_2)
 {
    // Expect two strings not to be equal.
    EXPECT_STRNE("hello", "world");

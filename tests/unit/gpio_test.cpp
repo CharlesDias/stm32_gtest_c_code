@@ -35,7 +35,7 @@ class GpioUnitTest : public TestFixture
       }
 };
 
-TEST_F(GpioUnitTest, GPIO_Constructor_should_initialize_struct_field)
+TEST_F(GpioUnitTest, GPIO_Initialize_should_initialize_struct_field)
 {
    Gpio_t Led = {0};
    GpioPort_t *LedPort = (GpioPort_t *)LD1_GPIO_Port;
