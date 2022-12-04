@@ -8,7 +8,6 @@
 #include "bsp.h"
 #include "stm32f4xx_hal.h"
 
-#define __FILE__ (__builtin_strrchr("/"__BASE_FILE__, '/') + 1)
 
 extern UART_HandleTypeDef huart3;
 

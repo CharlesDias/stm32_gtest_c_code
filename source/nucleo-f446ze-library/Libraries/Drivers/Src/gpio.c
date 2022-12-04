@@ -7,12 +7,15 @@
 
 #include "Drivers/Include/gpio.h"
 #include "stm32f4xx_hal.h"
+#include <assert.h>
 
 
 void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin)
 {
-   assert_param(me != NULL && port != NULL);
-   assert_param(!me->init);
+   assert(me != NULL);
+   assert(!me->init);
+
+   assert(port != NULL);
 
    me->init = true;
    me->port = port;
@@ -21,14 +24,16 @@ void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin)
 
 void GPIO_TogglePin(const Gpio_t * const me)
 {
-   assert_param(me != NULL && me->init);
+   assert(me != NULL);
+   assert(me->init);
 
    HAL_GPIO_TogglePin((GPIO_TypeDef *)me->port, me->pin);
 }
 
 void GPIO_WritePin(const Gpio_t * const me, GpioState_t state)
 {
-   assert_param(me != NULL && me->init);
+   assert(me != NULL);
+   assert(me->init);
 
    if(state == GPIO_STATE_SET)
    {
@@ -42,7 +47,8 @@ void GPIO_WritePin(const Gpio_t * const me, GpioState_t state)
 
 GpioState_t GPIO_ReadPin(const Gpio_t * const me)
 {
-   assert_param(me != NULL && me->init);
+   assert(me != NULL);
+   assert(me->init);
 
    if(HAL_GPIO_ReadPin((GPIO_TypeDef *)me->port, me->pin))
    {
