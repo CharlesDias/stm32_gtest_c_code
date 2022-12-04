@@ -27,15 +27,15 @@ typedef enum
 
 typedef struct Gpio
 {
-   bool         init;
-   GpioPort_t * port;
-   GpioPin_t    pin;
+   bool              init;
+   const GpioPort_t *port;
+   GpioPin_t         pin;
 }Gpio_t;
 
 
-void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin);
+void GPIO_Initialize(Gpio_t * const me, const GpioPort_t * const port, const GpioPin_t pin);
 void GPIO_TogglePin(const Gpio_t * const me);
-void GPIO_WritePin(const Gpio_t * const me, GpioState_t state);
+void GPIO_WritePin(const Gpio_t * const me, const GpioState_t state);
 GpioState_t GPIO_ReadPin(const Gpio_t * const me);
 
 

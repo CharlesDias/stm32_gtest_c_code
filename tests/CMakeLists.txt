@@ -20,7 +20,7 @@ target_include_directories( ${UNIT_TEST} PRIVATE
 
 target_link_libraries( ${UNIT_TEST} PUBLIC
    ${LIBRARY_NAME}
-   ${ASSERT_MOCK}
+   # ${ASSERT_MOCK}
    GTest::gmock_main
 )
 

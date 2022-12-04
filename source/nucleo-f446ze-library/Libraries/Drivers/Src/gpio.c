@@ -10,7 +10,7 @@
 #include <assert.h>
 
 
-void GPIO_Initialize(Gpio_t * const me, GpioPort_t * port, GpioPin_t pin)
+void GPIO_Initialize(Gpio_t * const me, const GpioPort_t * const port, const GpioPin_t pin)
 {
    assert(me != NULL);
    assert(!me->init);
@@ -30,7 +30,7 @@ void GPIO_TogglePin(const Gpio_t * const me)
    HAL_GPIO_TogglePin((GPIO_TypeDef *)me->port, me->pin);
 }
 
-void GPIO_WritePin(const Gpio_t * const me, GpioState_t state)
+void GPIO_WritePin(const Gpio_t * const me, const GpioState_t state)
 {
    assert(me != NULL);
    assert(me->init);
