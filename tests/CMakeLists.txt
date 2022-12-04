@@ -52,7 +52,7 @@ add_executable( ${DRIVERS_UNIT_TEST}
 )
 
 target_link_libraries( ${DRIVERS_UNIT_TEST} PUBLIC
-   ${LIBRARY_NAME}
+   ${DRIVERS_LIBRARY_TARGET}
    # ${ASSERT_MOCK}
    GTest::gmock_main
 )
@@ -60,24 +60,46 @@ gtest_discover_tests( ${DRIVERS_UNIT_TEST}
 )
 
 ######################################################################
+# Unit tests for middleware functions
+set(MIDDLEWARE_UNIT_TEST MiddlewareUnitTest)
+add_executable( ${MIDDLEWARE_UNIT_TEST}
+   ${TEST_FOLDER_PATH}/unit/led_test.cpp
+)
+
+target_link_libraries( ${MIDDLEWARE_UNIT_TEST} PUBLIC
+   ${MIDDLEWARE_LIBRARY_TARGET}
+   GTest::gmock_main
+)
+gtest_discover_tests( ${MIDDLEWARE_UNIT_TEST}
+)
+
+######################################################################
 # Settings for code coverage
 if (ENABLE_COVERAGE)
    set(COVERAGE_MAIN "coverage")
+
    set(COVERAGE_EXCLUDES
       "${PROJECT_SOURCE_DIR}/build/*"
-      "${PROJECT_SOURCE_DIR}/stm32-cube-ide/.settings/*"
-      "${PROJECT_SOURCE_DIR}/stm32-cube-ide/Core/*"
-      "${PROJECT_SOURCE_DIR}/stm32-cube-ide/Debug/*"
-      "${PROJECT_SOURCE_DIR}/stm32-cube-ide/Drivers/*"
+      "${PROJECT_SOURCE_DIR}/stm32-cube-ide/*"
       "${PROJECT_SOURCE_DIR}/cmake/*"
-      # "${PROJECT_SOURCE_DIR}/docs/*"
+      "${PROJECT_SOURCE_DIR}/docs/*"
       # "${PROJECT_SOURCE_DIR}/external/*"
       "${PROJECT_SOURCE_DIR}/tests/*"
       "/usr/include/*"
-      )
+   )
+
+   set(COVERAGE_DEPENDENCIES 
+      ${DRIVERS_UNIT_TEST}
+      ${MIDDLEWARE_UNIT_TEST}
+      ${HELLO_UNIT_TEST}
+      ${HELLO_INTEGRATION_TEST}
+   ) 
+
    setup_target_for_coverage_lcov(
       NAME ${COVERAGE_MAIN}
-      EXECUTABLE ${DRIVERS_UNIT_TEST} ${HELLO_UNIT_TEST} ${HELLO_INTEGRATION_TEST}
-      DEPENDENCIES ${DRIVERS_UNIT_TEST} ${HELLO_UNIT_TEST} ${HELLO_INTEGRATION_TEST}
+      EXECUTABLE ctest -j${PROCESSOR_COUNT}
+      DEPENDENCIES ${COVERAGE_DEPENDENCIES}
+      EXCLUDE  ${COVERAGE_EXCLUDES}
    )
+
 endif()

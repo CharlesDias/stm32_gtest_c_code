@@ -36,6 +36,8 @@ enable_testing()
 
 # Variables name for target
 set(LIBRARY_NAME library_gpio)
+set(DRIVERS_LIBRARY_TARGET drivers_library)
+set(MIDDLEWARE_LIBRARY_TARGET middleware_library)
 
 add_subdirectory(source)
 add_subdirectory(tests)
