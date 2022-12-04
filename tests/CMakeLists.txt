@@ -60,7 +60,7 @@ gtest_discover_tests( ${HELLO_INTEGRATION_TEST}
 # Unit tests for drivers functions
 set(DRIVERS_UNIT_TEST DriversUnitTest)
 add_executable( ${DRIVERS_UNIT_TEST}
-   ${TEST_FOLDER_PATH}/unit/gpio_test.cpp
+   ${TEST_FOLDER_PATH}/unit/drivers/gpio_test.cpp
 )
 
 target_link_libraries( ${DRIVERS_UNIT_TEST} PUBLIC
@@ -75,7 +75,7 @@ gtest_discover_tests( ${DRIVERS_UNIT_TEST}
 # Unit tests for middleware functions
 set(MIDDLEWARE_UNIT_TEST MiddlewareUnitTest)
 add_executable( ${MIDDLEWARE_UNIT_TEST}
-   ${TEST_FOLDER_PATH}/unit/led_test.cpp
+   ${TEST_FOLDER_PATH}/unit/middleware/led_test.cpp
 )
 
 target_link_libraries( ${MIDDLEWARE_UNIT_TEST} PUBLIC

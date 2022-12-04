@@ -31,7 +31,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# It must to be declare after test folder
+# It must to be declare before the test folder
 enable_testing()
 
 # Variables name for target
