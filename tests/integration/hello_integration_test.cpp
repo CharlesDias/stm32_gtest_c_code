@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "gmock/gmock.h"
 
 
 TEST(HelloIntegrationTests, Test_1)
