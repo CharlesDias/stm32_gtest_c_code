@@ -14,10 +14,10 @@ include_directories(
    ${TEST_FOLDER_PATH}/mock
 )
 
-set(ASSERT_MOCK AssertMock)
-add_library(${ASSERT_MOCK}
-   ${TEST_FOLDER_PATH}/mock/assert_mock.c
-) 
+# set(ASSERT_MOCK AssertMock)
+# add_library(${ASSERT_MOCK}
+#    ${TEST_FOLDER_PATH}/mock/assert_mock.c
+# ) 
 
 ######################################################################
 # Hello unit test
@@ -27,9 +27,21 @@ add_executable( ${HELLO_UNIT_TEST}
 )
 
 target_link_libraries( ${HELLO_UNIT_TEST} PUBLIC
-   GTest::gmock_main
+   GTest::gtest_main
 )
 gtest_discover_tests( ${HELLO_UNIT_TEST}
+   # See
+   # https://cmake.org/cmake/help/latest/module/GoogleTest.html#command:gtest_discover_tests
+   # 
+   # XML_OUTPUT_DIR dir
+   # New in version 3.18.
+
+   # If specified, the parameter is passed along with --gtest_output=xml: to test executable. 
+   # The actual file name is the same as the test target, including prefix and suffix. This should
+   # be used instead of EXTRA_ARGS --gtest_output=xml to avoid race conditions writing the XML 
+   # result output when using parallel test execution.
+
+   # XML_OUTPUT_DIR ${TEST_FOLDER_PATH}
 )
 
 ######################################################################
@@ -39,7 +51,7 @@ add_executable( ${HELLO_INTEGRATION_TEST}
 ${TEST_FOLDER_PATH}/integration/hello_integration_test.cpp
 )
 target_link_libraries( ${HELLO_INTEGRATION_TEST}
-   GTest::gmock_main
+   GTest::gtest_main
 )
 gtest_discover_tests( ${HELLO_INTEGRATION_TEST}
 )
