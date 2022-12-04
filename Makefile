@@ -2,19 +2,27 @@ all: build
 	@echo ""
 	@echo "Done!"
 
-config:
-	@echo "-------------------- Configure CMake ---------------------"
+build:
+	@echo "-------------------- Configure and Build CMake -----------"
 	cmake -S . -B build
+	cmake --build build -- -j4
 	@echo ""
 
-build: config
-	@echo "-------------------- Build CMake--------------------------"
+test: build
+	@echo "-------------------- Run CTest ---------------------------"
+	cd build && pwd && ctest --verbose
+	@echo ""
+
+coverage:
+	@echo "-------------------- Build Coverage--------------------------"
+	cmake -DENABLE_COVERAGE=ON -S . -B build
 	cmake --build build --config Debug --target coverage -j4
 	@echo ""
 
-test:
-	@echo "-------------------- Run CTest ---------------------------"
-	cd build && pwd && ctest --verbose
+report:
+	@echo "-------------------- Coverage Report ---------------------"
+	lcov --capture --directory build/coverage --output-file coverage.info
+	genhtml coverage.info --output-directory test/
 	@echo ""
 
 dependency:
