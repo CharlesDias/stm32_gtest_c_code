@@ -14,7 +14,7 @@ build: config
 
 test:
 	@echo "-------------------- Run CTest ---------------------------"
-	cd build && pwd && ctest
+	cd build && pwd && ctest --verbose
 	@echo ""
 
 dependency:

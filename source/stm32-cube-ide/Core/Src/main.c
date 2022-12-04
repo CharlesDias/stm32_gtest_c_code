@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "bsp.h"
 #include "Drivers/Include/gpio.h"
+#include "Middleware/Include/led.h"
 
 /* USER CODE END Includes */
 
@@ -98,31 +99,43 @@ int main(void)
   // Sample code to use Library Gpio
   BSP_Initialize();
 
-  Gpio_t LedGreen = {0};
-  GPIO_Initialize(&LedGreen, (GpioPort_t *)NULL, LD1_Pin);
+  Gpio_t GpioLedBlue = {0};
+  GPIO_Initialize(&GpioLedBlue, (GpioPort_t *)LD2_GPIO_Port, LD2_Pin);
 
-  Gpio_t LedBlue = {0};
-  GPIO_Initialize(&LedBlue, (GpioPort_t *)LD2_GPIO_Port, LD2_Pin);
+  Gpio_t GpioLedGreen = {0};
+  GPIO_Initialize(&GpioLedGreen, (GpioPort_t *)LD1_GPIO_Port, LD1_Pin);
 
-  Gpio_t LedRed = {0};
-  GPIO_Initialize(&LedRed, (GpioPort_t *)LD3_GPIO_Port, LD3_Pin);
+  Gpio_t GpioLedRed = {0};
+  GPIO_Initialize(&GpioLedRed, (GpioPort_t *)LD3_GPIO_Port, LD3_Pin);
+
+  Led_t LedGreen = {0};
+  LED_Initialize(&LedGreen, &GpioLedGreen, LED_ACTIVE_HIGH);
+
+  Led_t LedRed = {0};
+  LED_Initialize(&LedRed, &GpioLedRed, LED_ACTIVE_HIGH);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  GPIO_WritePin(&GpioLedBlue, GPIO_STATE_RESET);
+  LED_Write(&LedRed, LED_STATE_OFF);
+  LED_Write(&LedGreen, LED_STATE_OFF);
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	GPIO_TogglePin(&LedGreen);
-	GPIO_WritePin(&LedRed, GPIO_STATE_RESET);
-	HAL_Delay(500);
+   GPIO_TogglePin(&GpioLedBlue);
 
-	GPIO_TogglePin(&LedGreen);
-	GPIO_WritePin(&LedRed, GPIO_STATE_SET);
-	HAL_Delay(500);
+   LED_Toggle(&LedRed);
+   LED_Write(&LedGreen, LED_STATE_OFF);
+   HAL_Delay(500);
+
+   LED_Toggle(&LedRed);
+   LED_Write(&LedGreen, LED_STATE_ON);
+   HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
