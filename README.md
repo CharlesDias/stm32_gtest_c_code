@@ -21,6 +21,8 @@ This is a sample project for testing C code for STM32 microcontrollers using the
 * Assert verification and prints the failures via huart3.
 * Use of Docker container.
 
+I know! Maybe... you're thinking it's overengineer to blink a LED. However, look on the bright side. The goal is to give an example of how to apply these practices and tools.
+
 ## Project structure
 
 ``` text
@@ -132,6 +134,8 @@ To generate the dependency graph, build the test project as previously described
 ```console
 make dependency
 ```
+
+Check the file build/graph_image.png.
 
 Dependency graph for test project.
 

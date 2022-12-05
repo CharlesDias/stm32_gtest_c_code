@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)             # Define explicitly to use of the standard C++17 declared in the previous line
 set(CMAKE_CXX_EXTENSIONS OFF)                   # Disabling vendor-specific extensions
 
-option(ENABLE_COVERAGE      "Enable a Code Coverage build."         ON)
+option(ENABLE_COVERAGE      "Enable a Code Coverage build."         OFF)
 
 ### CMAKE MODULES
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
