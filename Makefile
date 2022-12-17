@@ -19,11 +19,22 @@ coverage:
 	cmake --build build --config Debug --target coverage -j4
 	@echo ""
 
-report:
-	@echo "-------------------- Coverage Report ---------------------"
-	lcov --capture --directory build/coverage --output-file coverage.info
-	genhtml coverage.info --output-directory test/
+doxygen: build
+	@echo "-------------------- Build Coverage--------------------------"
+	cmake --build build --config Debug --target docs -j4
 	@echo ""
+
+gtest_report:
+	cd build-artifacts/gtest_report && xsltproc gtest2html.xslt out/*.xml > gtest_report.html
+	# cd report && xsltproc gtest2html.xslt *.xml > gtest_report.html
+	# cd report && xsltproc test.xslt *.xml > gtest_report.html
+	# cd report && xsltproc newgtest2html.xsl *.xml > gtest_report.html
+# Don't work!!!!
+# report:
+# 	@echo "-------------------- Coverage Report ---------------------"
+# 	lcov --capture --directory build/coverage --output-file coverage.info
+# 	genhtml coverage.info --output-directory test/
+# 	@echo ""
 
 dependency:
 	@echo "-------------------- Create Graph Dependecy --------------"

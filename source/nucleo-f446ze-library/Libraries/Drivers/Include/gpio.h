@@ -25,14 +25,23 @@ typedef enum
 }GpioState_t;
 
 
+/**
+ * @struct A structure to represent the GPIO pin.
+ */
 typedef struct Gpio
 {
-   bool              init;
-   const GpioPort_t *port;
-   GpioPin_t         pin;
+   bool              init; /**< Flag to inform if the structure has been initialized.*/
+   const GpioPort_t *port; /**< Port number.*/
+   GpioPin_t         pin;  /**< Pin number.*/
 }Gpio_t;
 
-
+/**
+ * @brief Initialize the \ref Gpio_t structure.
+ * 
+ * @param me Pointer to \ref Gpio_t.
+ * @param port Port number.
+ * @param pin Pin number.
+ */
 void GPIO_Initialize(Gpio_t * const me, const GpioPort_t * const port, const GpioPin_t pin);
 void GPIO_TogglePin(const Gpio_t * const me);
 void GPIO_WritePin(const Gpio_t * const me, const GpioState_t state);
