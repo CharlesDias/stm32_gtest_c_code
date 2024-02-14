@@ -14,6 +14,10 @@ option(ENABLE_COVERAGE      "Enable a Code Coverage build."         OFF)
 
 ### CMAKE MODULES
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/)
+
+# Doxygen module
+include(Docs)
+
 if (ENABLE_COVERAGE)
     include(CodeCoverage)
     append_coverage_compiler_flags()

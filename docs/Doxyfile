@@ -1,0 +1,78 @@
+# Configuration for Doxygen for use with CMake
+# Only options that deviate from the default are included
+# To create a new Doxyfile containing all available options, call `doxygen -g`
+
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+DOXYFILE_ENCODING       = UTF-8
+PROJECT_NAME            = "STM32 C code and Google Test Framework"
+PROJECT_NUMBER          = 1.0
+PROJECT_BRIEF           =
+PROJECT_LOGO            =
+OUTPUT_DIRECTORY        = ./
+OUTPUT_LANGUAGE         = English
+MARKDOWN_SUPPORT        = YES
+
+#---------------------------------------------------------------------------
+# Build related configuration options
+#---------------------------------------------------------------------------
+EXTRACT_ALL             = YES
+RECURSIVE               = YES
+GENERATE_HTML           = YES
+GENERATE_LATEX          = NO
+HAVE_DOT                = YES
+
+# If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_GRAPH, and HAVE_DOT tags are set
+# to YES then doxygen will generate a graph for each documented file showing the direct
+# and indirect include dependencies of the file with other documented files.
+INCLUDE_GRAPH           = YES
+
+# If the GRAPHICAL_HIERARCHY and HAVE_DOT tags are set to YES then doxygen will graphical
+# hierarchy of all classes instead of a textual one.
+GRAPHICAL_HIERARCHY     = YES
+
+# If the CLASS_DIAGRAMS tag is set to YES (the default) doxygen will generate a class 
+# diagram (in HTML and $\mbox{\LaTeX}$) for classes with base or super classes.
+CLASS_DIAGRAMS          = YES
+
+# If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen will generate a graph
+# for each documented class showing the direct and indirect inheritance relations.
+CLASS_GRAPH             = YES
+
+# If the COLLABORATION_GRAPH and HAVE_DOT tags are set to YES then doxygen will generate a
+# graph for each documented class showing the direct and indirect implementation dependencies
+# (inheritance, containment, and class references variables) of the class with other documented classes.
+COLLABORATION_GRAPH     = YES
+
+# If the CALL_GRAPH and HAVE_DOT tags are set to YES then doxygen will generate a call
+# dependency graph for every global function or class method
+CALL_GRAPH              = YES
+UML_LOOK                = YES
+UML_LIMIT_NUM_FIELDS    = 50
+TEMPLATE_RELATIONS      = YES
+DOT_GRAPH_MAX_NODES     = 100
+MAX_DOT_GRAPH_DEPTH     = 0
+DOT_TRANSPARENT         = YES
+HIDE_UNDOC_RELATIONS    = NO
+
+#---------------------------------------------------------------------------
+# Configuration options related to the input files
+#---------------------------------------------------------------------------
+USE_MDFILE_AS_MAINPAGE  = ../README.md
+IMAGE_PATH              = ./images
+INPUT                   = ../README.md \  
+INPUT                   = ../source/nucleo-f446ze-library/Libraries
+INPUT_ENCODING          = UTF-8
+FILE_PATTERNS           = *.c \
+                         *.cc \
+                         *.cpp \
+                         *.c++ \
+                         *.h \
+                         *.hpp \
+                         *.h++ \
+                         *.md \
+                         *.dox \
+                         *.doc \
+                         *.txt
+
