@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 
 #include "Middleware/Include/led.h"
-#include "gpio_mock.cpp"
+#include "gpio_mock.h"
 
 using ::testing::_;
 using ::testing::InSequence;
