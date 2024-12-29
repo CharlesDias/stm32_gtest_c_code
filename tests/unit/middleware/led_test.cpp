@@ -1,94 +1,92 @@
-#include "main_override.h"
-#include "Middleware/Include/led.h"
-#include "gpio_mock.cpp"
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "Middleware/Include/led.h"
+#include "gpio_mock.cpp"
+
 using ::testing::_;
-using ::testing::Return;
 using ::testing::InSequence;
+using ::testing::Return;
 
-class LedUnitTest : public TestFixture
+class LedUnitTest : public ::testing::Test
 {
-   public:
-      Gpio_t gpio = {0};
+protected:
+   ::testing::StrictMock<GpioMock> *mock;
+   Gpio_t gpio = {0};
+   Led_t led = {0};
 
-      LedUnitTest() {}
+   void SetUp() override
+   {
+      // Create and install the mock
+      mock = new ::testing::StrictMock<GpioMock>();
+      setGpioMock(mock);
+   }
 
-      static void SetUpTestSuite()
-      {
-         // std::cout << "SetUpTestSuite." << std::endl;
-      }
-
-      static void TearDownTestSuite()
-      {
-         // std::cout << "TearDownTestSuite." << std::endl;
-      }
-
-      void SetUp() override
-      {
-         // std::cout << "Set up test cases." << std::endl;
-         gpio = {
-            .init = false,
-            .port = NULL,
-            .pin = 0};
-         const GpioPort_t *gpioPort = (GpioPort_t *)LD1_GPIO_Port;
-         const GpioPin_t gpioPin = LD1_Pin;
-         GPIO_Initialize(&gpio, gpioPort, gpioPin);
-      }
-
-      void TearDown() override
-      {
-         // std::cout << "Tear Down test cases." << std::endl;
-      }
+   void TearDown() override
+   {
+      // Unset the mock
+      setGpioMock(nullptr);
+      delete mock;
+   }
 };
 
-TEST_F(LedUnitTest, LED_Initialize_should_initialize_struct_field)
+TEST_F(LedUnitTest, LED_WhenCalled_InitializesStructFields)
 {
-   Led_t Led = {0};
    LedActiveLevel_t expectedActiveLevel = LED_ACTIVE_HIGH;
-   
-   LED_Initialize(&Led, &gpio, expectedActiveLevel);
 
-   ASSERT_EQ(true, Led.init);
-   // ASSERT_EQ(gpio, Led.gpio);
-   ASSERT_EQ(expectedActiveLevel, Led.activeLevel);
+   LED_Initialize(&led, &gpio, expectedActiveLevel);
+
+   EXPECT_TRUE(led.init);
+   EXPECT_EQ(&gpio, led.gpio);
+   EXPECT_EQ(expectedActiveLevel, led.activeLevel);
 }
 
-TEST_F(LedUnitTest, LED_Write_when_setAsActiveHigh)
+struct LedParam
 {
-   Led_t Led = {0};
-   LED_Initialize(&Led, &gpio, LED_ACTIVE_HIGH);
+   LedActiveLevel_t activeLevel;
+   LedState_t state;
+   GpioState_t expectedGpioState;
+   const char *testName;
+};
 
-   InSequence seq;
-   EXPECT_CALL(*_halMock, GPIO_WritePin(_,GPIO_STATE_SET)).Times(1);
-   EXPECT_CALL(*_halMock, GPIO_WritePin(_,GPIO_STATE_RESET)).Times(1);
+class LedParamTest : public LedUnitTest,
+                     public testing::WithParamInterface<LedParam>
+{
+};
 
-   LED_Write(&Led, LED_STATE_ON);
-   LED_Write(&Led, LED_STATE_OFF);
+TEST_P(LedParamTest, LED_Write_WhenCalled_CallsGpioWritePinWithExpectedState)
+{
+   const auto &p = GetParam();
+
+   LED_Initialize(&led, &gpio, p.activeLevel);
+
+   EXPECT_CALL(*mock, GPIO_WritePin(&gpio, p.expectedGpioState)).Times(1);
+
+   LED_Write(&led, p.state);
 }
 
-TEST_F(LedUnitTest, LED_Write_when_setAsActiveLow)
+INSTANTIATE_TEST_SUITE_P(
+    LedWriteTests,
+    LedParamTest,
+    testing::Values(
+        // activeLevel,    state,         expectedGpioState, testName
+        LedParam{LED_ACTIVE_HIGH, LED_STATE_ON, GPIO_STATE_SET, "ActiveHigh_STATE_ON_GPIO_SET"},
+        LedParam{LED_ACTIVE_HIGH, LED_STATE_OFF, GPIO_STATE_RESET, "ActiveHigh_STATE_OFF_GPIO_RESET"},
+        LedParam{LED_ACTIVE_LOW, LED_STATE_ON, GPIO_STATE_RESET, "ActiveLow_STATE_ON_GPIO_RESET"},
+        LedParam{LED_ACTIVE_LOW, LED_STATE_OFF, GPIO_STATE_SET, "ActiveLow_STATE_OFF_GPIO_SET"}),
+    [](const testing::TestParamInfo<LedParamTest::ParamType> &info)
+    {
+       return info.param.testName;
+    }
+
+);
+
+TEST_F(LedUnitTest, LED_Toggle_WhenCalled_CallsGpioTogglePin)
 {
-   Led_t Led = {0};
-   LED_Initialize(&Led, &gpio, LED_ACTIVE_LOW);
+   LED_Initialize(&led, &gpio, LED_ACTIVE_HIGH);
 
-   InSequence seq;
-   EXPECT_CALL(*_halMock, GPIO_WritePin(_,GPIO_STATE_RESET)).Times(1);
-   EXPECT_CALL(*_halMock, GPIO_WritePin(_,GPIO_STATE_SET)).Times(1);
+   EXPECT_CALL(*mock, GPIO_TogglePin(&gpio)).Times(2);
 
-   LED_Write(&Led, LED_STATE_ON);
-   LED_Write(&Led, LED_STATE_OFF);
-}
-
-TEST_F(LedUnitTest, LED_Toggle_should_CallGpio_togglePin)
-{
-   Led_t Led = {0};
-   LED_Initialize(&Led, &gpio, LED_ACTIVE_HIGH);
-
-   EXPECT_CALL(*_halMock, GPIO_TogglePin(_)).Times(2);
-
-   LED_Toggle(&Led);
-   LED_Toggle(&Led);
+   LED_Toggle(&led);
+   LED_Toggle(&led);
 }
