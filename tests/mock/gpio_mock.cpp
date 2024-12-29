@@ -1,21 +1,49 @@
-#include "fixture.h"
+#include "gpio_mock.h"
 
-void GPIO_Initialize(Gpio_t * const me, const GpioPort_t * const port, const GpioPin_t pin)
+static GpioMock *g_mock = nullptr;
+
+void setGpioMock(GpioMock *mock)
 {
-   TestFixture::_halMock->GPIO_Initialize(me, port, pin);
+   g_mock = mock;
 }
 
-void GPIO_TogglePin(const Gpio_t * const me)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void GPIO_Initialize(Gpio_t *const me, const GpioPort_t *const port, const GpioPin_t pin)
 {
-   TestFixture::_halMock->GPIO_TogglePin(me);
+   if (g_mock)
+   {
+      g_mock->GPIO_Initialize(me, port, pin);
+   }
 }
 
-void GPIO_WritePin(const Gpio_t * const me, const GpioState_t state)
+void GPIO_TogglePin(const Gpio_t *const me)
 {
-   TestFixture::_halMock->GPIO_WritePin(me, state);
+   if (g_mock)
+   {
+      g_mock->GPIO_TogglePin(me);
+   }
 }
 
-GpioState_t GPIO_ReadPin(const Gpio_t * const me)
+void GPIO_WritePin(const Gpio_t *const me, const GpioState_t state)
 {
-   return TestFixture::_halMock->GPIO_ReadPin(me);
+   if (g_mock)
+   {
+      g_mock->GPIO_WritePin(me, state);
+   }
 }
+
+GpioState_t GPIO_ReadPin(const Gpio_t *const me)
+{
+   if (g_mock)
+   {
+      return g_mock->GPIO_ReadPin(me);
+   }
+   return GPIO_STATE_RESET; // Default fallback if no mock is set
+}
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

@@ -76,6 +76,7 @@ gtest_discover_tests( ${DRIVERS_UNIT_TEST}
 set(MIDDLEWARE_UNIT_TEST MiddlewareUnitTest)
 add_executable( ${MIDDLEWARE_UNIT_TEST}
    ${TEST_FOLDER_PATH}/unit/middleware/led_test.cpp
+   ${TEST_FOLDER_PATH}/mock/gpio_mock.cpp
 )
 
 target_link_libraries( ${MIDDLEWARE_UNIT_TEST} PUBLIC

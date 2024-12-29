@@ -1,92 +1,182 @@
-// #include "GpioMock.cpp"
-#include "main_override.h"
-#include "Drivers/Include/gpio.h"
-#include "hal_gpio_mock.cpp"
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "Drivers/Include/gpio.h"
+#include "hal_gpio_mock.cpp"
+
 using ::testing::_;
+using ::testing::InSequence;
 using ::testing::Return;
 
-class GpioUnitTest : public TestFixture
+class GpioUnitTest : public ::testing::Test
 {
-   public:
-      GpioUnitTest() {}
+protected:
+   ::testing::StrictMock<HalMock> *mock;
 
-      static void SetUpTestSuite()
-      {
-         // std::cout << "SetUpTestSuite." << std::endl;
-      }
+   Gpio_t gpio = {0};
+   GpioPort_t *gpioPort = (GpioPort_t *)0x40020000;
+   GpioPin_t gpioPin = (uint16_t)0x0001;
 
-      static void TearDownTestSuite()
-      {
-         // std::cout << "TearDownTestSuite." << std::endl;
-      }
+   void SetUp() override
+   {
+      // Create and install the mock
+      mock = new ::testing::StrictMock<HalMock>();
+      setHalMock(mock);
+   }
 
-      void SetUp() override
-      {
-         // std::cout << "Set up test cases." << std::endl;
-      }
-
-      void TearDown() override
-      {
-         // std::cout << "Tear Down test cases." << std::endl;
-      }
+   void TearDown() override
+   {
+      setHalMock(nullptr);
+      delete mock;
+   }
 };
 
-TEST_F(GpioUnitTest, GPIO_Initialize_should_initialize_struct_field)
+TEST_F(GpioUnitTest, GPIO_Initialize_WhenCalledWithValidParam_ThenInitializesStructField)
 {
-   Gpio_t Led = {0};
-   GpioPort_t *LedPort = (GpioPort_t *)LD1_GPIO_Port;
-   GpioPin_t LedPin = LD1_Pin;
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
 
-   GPIO_Initialize(&Led, LedPort, LedPin);
-
-   ASSERT_EQ(true, Led.init);
-   ASSERT_EQ(LedPort, Led.port);
-   ASSERT_EQ(LedPin, Led.pin);
+   EXPECT_EQ(true, gpio.init);
+   EXPECT_EQ(gpioPort, gpio.port);
+   EXPECT_EQ(gpioPin, gpio.pin);
 }
 
-TEST_F(GpioUnitTest, GPIO_WritePin_should_CallHAL_GPIO_WritePin_when_PassedValidParameters)
+TEST_F(GpioUnitTest, GPIO_WritePin_WhenCalledWithValidParam_ThenCallsHAL_GPIO_WritePin)
 {
-   GpioPort_t *expectPort = (GpioPort_t *)LD1_GPIO_Port;
-   GpioPin_t expectedPin = LD1_Pin;
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
+
+   InSequence seq;
+   EXPECT_CALL(*mock, HAL_GPIO_WritePin((GPIO_TypeDef *)gpioPort, gpioPin, (GPIO_PinState)GPIO_STATE_SET)).Times(1);
+   EXPECT_CALL(*mock, HAL_GPIO_WritePin((GPIO_TypeDef *)gpioPort, gpioPin, (GPIO_PinState)GPIO_STATE_RESET)).Times(1);
+
+   GPIO_WritePin(&gpio, GPIO_STATE_SET);
+   GPIO_WritePin(&gpio, GPIO_STATE_RESET);
+}
+
+TEST_F(GpioUnitTest, GPIO_ReadPin_WhenCalledWithValidParam_ThenCallsHAL_GPIO_ReadPin)
+{
+   GpioState_t returnedState;
    GpioState_t expectStateSet = GPIO_STATE_SET;
    GpioState_t expectStateReset = GPIO_STATE_RESET;
-   Gpio_t Led = {.init = true, .port = expectPort, .pin = expectedPin};
 
-   EXPECT_CALL(*_halMock, HAL_GPIO_WritePin((GPIO_TypeDef *)expectPort, expectedPin, (GPIO_PinState)expectStateSet)).Times(1);
-   EXPECT_CALL(*_halMock, HAL_GPIO_WritePin((GPIO_TypeDef *)expectPort, expectedPin, (GPIO_PinState)expectStateReset)).Times(1);
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
 
-   GPIO_WritePin(&Led, GPIO_STATE_SET);
-   GPIO_WritePin(&Led, GPIO_STATE_RESET);
+   EXPECT_CALL(*mock, HAL_GPIO_ReadPin((GPIO_TypeDef *)gpioPort, gpioPin)).Times(2).WillOnce(Return((GPIO_PinState)expectStateSet)).WillOnce(Return((GPIO_PinState)expectStateReset));
+
+   returnedState = GPIO_ReadPin(&gpio);
+   EXPECT_EQ(expectStateSet, returnedState);
+
+   returnedState = GPIO_ReadPin(&gpio);
+   EXPECT_EQ(expectStateReset, returnedState);
 }
 
-TEST_F(GpioUnitTest, GPIO_ReadPin_should_CallHAL_GPIO_ReadPin_when_PassedValidParameters)
+TEST_F(GpioUnitTest, GPIO_TogglePin_WhenCalledWithValidParam_ThenCallsHAL_GPIO_TogglePin)
 {
-   GpioPort_t *expectedPort = (GpioPort_t *)LD1_GPIO_Port;
-   GpioPin_t expectedPin = LD1_Pin;
-   GpioState_t expectStateSet = GPIO_STATE_SET;
-   GpioState_t expectStateReset = GPIO_STATE_RESET;
-   Gpio_t Led = {.init = true, .port = expectedPort, .pin = expectedPin};
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
 
-   EXPECT_CALL(*_halMock, HAL_GPIO_ReadPin((GPIO_TypeDef *)expectedPort, expectedPin)).Times(2).WillOnce(Return((GPIO_PinState)expectStateSet)).WillOnce(Return((GPIO_PinState)expectStateReset));
+   EXPECT_CALL(*mock, HAL_GPIO_TogglePin((GPIO_TypeDef *)gpioPort, gpioPin)).Times(1);
 
-   GpioState_t actualStateSet = GPIO_ReadPin(&Led);
-   EXPECT_EQ(expectStateSet, actualStateSet);
-
-   GpioState_t actualStateReset = GPIO_ReadPin(&Led);
-   EXPECT_EQ(expectStateReset, actualStateReset);
+   GPIO_TogglePin(&gpio);
 }
 
-TEST_F(GpioUnitTest, GPIO_TogglePin_should_CallHAL_GPIO_TogglePin_when_PassedValidParameters)
+#if GTEST_HAS_DEATH_TEST // Make sure death tests are available
+TEST_F(GpioUnitTest, GPIO_Initialize_WhenPointerIsNull_ThenFailsAssert)
 {
-   GpioPort_t *expectedPort = (GpioPort_t *)LD1_GPIO_Port;
-   GpioPin_t expectedPin = LD1_Pin;
-   Gpio_t Led = {.init = true, .port = expectedPort, .pin = expectedPin};
-
-   EXPECT_CALL(*_halMock, HAL_GPIO_TogglePin((GPIO_TypeDef *)expectedPort, expectedPin)).Times(1);
-
-   GPIO_TogglePin(&Led);
+   // The function asserts me != NULL, so passing NULL should cause a crash/abort.
+   EXPECT_DEATH(
+       {
+          GPIO_Initialize(nullptr, gpioPort, gpioPin);
+       },
+       ".*" // A regex checking for assertion message, can be ".*" to ignore
+   );
 }
+
+TEST_F(GpioUnitTest, GPIO_Initialize_WhenAlreadyInitialized_ThenFailsAssert)
+{
+   // First init is valid
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
+
+   // Second init with same struct => assertion fail: assert(!me->init);
+   EXPECT_DEATH(
+       {
+          GPIO_Initialize(&gpio, gpioPort, gpioPin);
+       },
+       ".*");
+}
+
+TEST_F(GpioUnitTest, GPIO_Initialize_WhenPortIsNull_ThenFailsAssert)
+{
+   // me != NULL, me->init is false, but 'port' is NULL => assertion triggers
+   EXPECT_DEATH(
+       {
+          GPIO_Initialize(&gpio, nullptr, gpioPin);
+       },
+       ".*");
+}
+
+TEST_F(GpioUnitTest, Gpio_WritePin_WhenNotInitialized_ThenFailsAssert)
+{
+   // me->init is false => assertion triggers
+   EXPECT_DEATH(
+       {
+          GPIO_WritePin(&gpio, GPIO_STATE_SET);
+       },
+       ".*");
+}
+
+TEST_F(GpioUnitTest, GPIO_WritePin_WhenPointerIsNull_ThenFailsAssert)
+{
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
+   // The function asserts me != NULL, so passing NULL should cause a crash/abort.
+   EXPECT_DEATH(
+       {
+          GPIO_WritePin(nullptr, GPIO_STATE_SET);
+       },
+       ".*" // A regex checking for assertion message, can be ".*" to ignore
+   );
+}
+
+TEST_F(GpioUnitTest, GPIO_ReadPin_WhenNotInitialized_ThenFailsAssert)
+{
+   // me->init is false => assertion triggers
+   EXPECT_DEATH(
+       {
+          GPIO_ReadPin(&gpio);
+       },
+       ".*");
+}
+
+TEST_F(GpioUnitTest, GPIO_ReadPin_WhenPointerIsNull_ThenFailsAssert)
+{
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
+   // The function asserts me != NULL, so passing NULL should cause a crash/abort.
+   EXPECT_DEATH(
+       {
+          GPIO_ReadPin(nullptr);
+       },
+       ".*" // A regex checking for assertion message, can be ".*" to ignore
+   );
+}
+
+TEST_F(GpioUnitTest, GPIO_TogglePin_WhenNotInitialized_ThenFailsAssert)
+{
+   // me->init is false => assertion triggers
+   EXPECT_DEATH(
+       {
+          GPIO_TogglePin(&gpio);
+       },
+       ".*");
+}
+
+TEST_F(GpioUnitTest, GPIO_TogglePin_WhenPointerIsNull_ThenFailsAssert)
+{
+   GPIO_Initialize(&gpio, gpioPort, gpioPin);
+   // The function asserts me != NULL, so passing NULL should cause a crash/abort.
+   EXPECT_DEATH(
+       {
+          GPIO_TogglePin(nullptr);
+       },
+       ".*" // A regex checking for assertion message, can be ".*" to ignore
+   );
+}
+
+#endif // GTEST_HAS_DEATH_TEST
