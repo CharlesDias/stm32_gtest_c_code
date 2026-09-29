@@ -1,0 +1,13 @@
+# Cppcheck suppressions used by "make cppcheck".
+# Format: <error id>[:<file>[:<line>]], where * is a wildcard.
+
+# Code from ST (HAL, CMSIS and the HAL configuration). These headers are only
+# included so cppcheck knows the HAL types; findings inside them are not ours.
+*:*/Drivers/CMSIS/*
+*:*/Drivers/STM32F4xx_HAL_Driver/*
+*:*/nucleo-f446ze-library/Inc/*
+
+# MISRA C:2012 Rule 8.7 (advisory): the library's public API is called by the
+# application, which is not part of this analysis, so every API function would
+# be reported as used in only one file.
+misra-c2012-8.7

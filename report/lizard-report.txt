@@ -1,0 +1,25 @@
+================================================
+  NLOC    CCN   token  PARAM  length  location  
+------------------------------------------------
+       9      1     59      3      11 GPIO_Initialize@13-23@./source/nucleo-f446ze-library/Libraries/Drivers/Src/gpio.c
+       6      1     39      1       7 GPIO_TogglePin@25-31@./source/nucleo-f446ze-library/Libraries/Drivers/Src/gpio.c
+      13      2     73      2      14 GPIO_WritePin@33-46@./source/nucleo-f446ze-library/Libraries/Drivers/Src/gpio.c
+      13      2     52      1      14 GPIO_ReadPin@48-61@./source/nucleo-f446ze-library/Libraries/Drivers/Src/gpio.c
+       9      1     59      3      11 LED_Initialize@12-22@./source/nucleo-f446ze-library/Libraries/Middleware/Src/led.c
+      18      4     77      2      21 LED_Write@24-44@./source/nucleo-f446ze-library/Libraries/Middleware/Src/led.c
+       6      1     31      1       7 LED_Toggle@46-52@./source/nucleo-f446ze-library/Libraries/Middleware/Src/led.c
+4 file analyzed.
+==============================================================
+NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
+--------------------------------------------------------------
+     44      10.2     1.5       55.8         4     ./source/nucleo-f446ze-library/Libraries/Drivers/Src/gpio.c
+     21       0.0     0.0        0.0         0     ./source/nucleo-f446ze-library/Libraries/Drivers/Include/gpio.h
+     36      11.0     2.0       55.7         3     ./source/nucleo-f446ze-library/Libraries/Middleware/Src/led.c
+     23       0.0     0.0        0.0         0     ./source/nucleo-f446ze-library/Libraries/Middleware/Include/led.h
+
+===============================================================================================================
+No thresholds exceeded (cyclomatic_complexity > 15 or length > 1000 or nloc > 1000000 or parameter_count > 100)
+==========================================================================================
+Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
+------------------------------------------------------------------------------------------
+       124      10.6     1.7       55.7        7            0      0.00    0.00

@@ -19,6 +19,31 @@ coverage:
 	cmake --build build --config Debug --target coverage -j4
 	@echo ""
 
+# Cppcheck with the MISRA C:2012 addon, limited to our code in Libraries/.
+# The ST HAL and CMSIS headers are only included so cppcheck knows the HAL
+# types; findings inside them are suppressed in cppcheck-suppressions.txt.
+# __GNUC__ makes CMSIS pick its GCC code instead of stopping with an #error.
+CPPCHECK_DIR = source/nucleo-f446ze-library
+
+cppcheck:
+	@echo "-------------------- Run Cppcheck with MISRA C:2012 ------"
+	mkdir -p build/cppcheck
+	cppcheck --std=c17 --platform=arm32-wchar_t4 --quiet --inline-suppr \
+		--enable=warning,style,performance,portability --addon=misra \
+		-D__GNUC__ -DSTM32F446xx -DUSE_HAL_DRIVER \
+		-I $(CPPCHECK_DIR)/Libraries \
+		-I $(CPPCHECK_DIR)/Inc \
+		-I $(CPPCHECK_DIR)/Drivers/STM32F4xx_HAL_Driver/Inc \
+		-I $(CPPCHECK_DIR)/Drivers/CMSIS/Include \
+		-I $(CPPCHECK_DIR)/Drivers/CMSIS/Device/ST/STM32F4xx/Include \
+		--suppressions-list=cppcheck-suppressions.txt \
+		--cppcheck-build-dir=build/cppcheck \
+		--template='{file}:{line}:{column}: {severity}: {message} [{id}]\n{code}' \
+		--output-file=build/cppcheck-report.txt \
+		$(CPPCHECK_DIR)/Libraries
+	@cat build/cppcheck-report.txt
+	@echo ""
+
 doxygen: build
 	@echo "-------------------- Build Coverage--------------------------"
 	cmake --build build --config Debug --target docs -j4
