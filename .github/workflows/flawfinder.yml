@@ -27,9 +27,18 @@ jobs:
       - name: Flawfinder scan
         run: flawfinder --html --context --minlevel=1 ./source/nucleo-f446ze-library/Libraries  > flawfinder-report.html
 
+      - name: Flawfinder scan for GitHub code scanning
+        run: flawfinder --sarif --minlevel=1 ./source/nucleo-f446ze-library/Libraries > flawfinder-results.sarif
+
       - name: Upload analysis results
         uses: actions/upload-artifact@v7
         with:
           name: Archive production artifacts
           path: flawfinder-report.html
           retention-days: 90
+
+      - name: Upload results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: flawfinder-results.sarif
+          category: flawfinder

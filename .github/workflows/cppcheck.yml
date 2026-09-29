@@ -29,3 +29,9 @@ jobs:
           name: cppcheck-report
           path: build/cppcheck-report.txt
           retention-days: 90
+
+      - name: Upload results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: build/cppcheck-results.sarif
+          category: cppcheck
