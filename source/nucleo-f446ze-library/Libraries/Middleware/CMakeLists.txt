@@ -7,5 +7,10 @@ add_library(${MIDDLEWARE_LIBRARY_TARGET} STATIC
 )
 
 target_include_directories( ${MIDDLEWARE_LIBRARY_TARGET} PUBLIC
-   "../../Libraries/"
+   "${CMAKE_CURRENT_SOURCE_DIR}/.."
+)
+
+target_compile_options( ${MIDDLEWARE_LIBRARY_TARGET} PRIVATE
+   ${LIBRARY_WARNING_FLAGS}
+   ${LIBRARY_ASSERT_FLAGS}
 )

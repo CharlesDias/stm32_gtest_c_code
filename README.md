@@ -82,15 +82,9 @@ I know! Maybe... you're thinking it's overengineer to blink a LED. However, look
 │
 └── tests
     ├── CMakeLists.txt
-    ├── header-overrides
-    │   ├── core_cm4_override.h
-    │   ├── main_override.h
-    │   ├── stm32f446xx_override.h
-    │   └── stm32f4xx_hal_gpio_override.h
     ├── integration
-    │   └── hello_integration_test.cpp
+    │   └── led_gpio_integration_test.cpp
     ├── mock
-    │   ├── assert_mock.c
     │   ├── gpio_mock.cpp
     │   ├── gpio_mock.h
     │   ├── hal_gpio_mock.cpp
@@ -98,7 +92,6 @@ I know! Maybe... you're thinking it's overengineer to blink a LED. However, look
     └── unit
         ├── drivers
         │   └── gpio_test.cpp
-        ├── hello_unit_test.cpp
         └── middleware
             └── led_test.cpp
 ```
@@ -133,6 +126,12 @@ Run the command below inside the Docker container
 
 ```console
 make clean && make build && make test
+```
+
+To generate the coverage report, run the command below, also inside the Docker container:
+
+```console
+make coverage
 ```
 
 Access the `build/coverage/index.html` file to see the coverage report.
