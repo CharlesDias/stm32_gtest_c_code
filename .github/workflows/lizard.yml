@@ -18,13 +18,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Lizard scan
         run: lizard --CCN 15 --length 1000 --arguments 100 ./source/nucleo-f446ze-library/Libraries > lizard-report.txt
 
       - name: Upload analysis results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: Archive production artifacts
           path: lizard-report.txt

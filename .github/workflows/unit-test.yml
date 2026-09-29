@@ -9,7 +9,7 @@ jobs:
       image: charlesdias/stm32_gtest:latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
 
     - name: Configure, build, and run Google Test
       run: |
