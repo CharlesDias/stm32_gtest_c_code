@@ -32,10 +32,6 @@ INCLUDE_GRAPH           = YES
 # hierarchy of all classes instead of a textual one.
 GRAPHICAL_HIERARCHY     = YES
 
-# If the CLASS_DIAGRAMS tag is set to YES (the default) doxygen will generate a class 
-# diagram (in HTML and $\mbox{\LaTeX}$) for classes with base or super classes.
-CLASS_DIAGRAMS          = YES
-
 # If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen will generate a graph
 # for each documented class showing the direct and indirect inheritance relations.
 CLASS_GRAPH             = YES
@@ -53,7 +49,6 @@ UML_LIMIT_NUM_FIELDS    = 50
 TEMPLATE_RELATIONS      = YES
 DOT_GRAPH_MAX_NODES     = 100
 MAX_DOT_GRAPH_DEPTH     = 0
-DOT_TRANSPARENT         = YES
 HIDE_UNDOC_RELATIONS    = NO
 
 #---------------------------------------------------------------------------
@@ -61,8 +56,8 @@ HIDE_UNDOC_RELATIONS    = NO
 #---------------------------------------------------------------------------
 USE_MDFILE_AS_MAINPAGE  = ../README.md
 IMAGE_PATH              = ./images
-INPUT                   = ../README.md \  
-INPUT                   = ../source/nucleo-f446ze-library/Libraries
+INPUT                   = ../README.md \
+                          ../source/nucleo-f446ze-library/Libraries
 INPUT_ENCODING          = UTF-8
 FILE_PATTERNS           = *.c \
                          *.cc \

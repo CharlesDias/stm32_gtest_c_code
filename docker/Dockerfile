@@ -23,11 +23,12 @@ RUN apt-get update && apt-get clean && apt-get install -y \
       python3-venv \
       && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Lizard and Flawfinder in a virtual environment, since Ubuntu 24.04
-# blocks system-wide pip installs (PEP 668). Only the two tools go on the PATH.
+# Install Lizard, Flawfinder and junit2html (HTML test report) in a virtual
+# environment, since Ubuntu 24.04 blocks system-wide pip installs (PEP 668).
+# Only the three tools go on the PATH.
 RUN python3 -m venv /opt/venv \
-      && /opt/venv/bin/pip install --no-cache-dir lizard==1.24.0 flawfinder==2.0.20 \
-      && ln -s /opt/venv/bin/lizard /opt/venv/bin/flawfinder /usr/local/bin/
+      && /opt/venv/bin/pip install --no-cache-dir lizard==1.24.0 flawfinder==2.0.20 junit2html==31.1.4 \
+      && ln -s /opt/venv/bin/lizard /opt/venv/bin/flawfinder /opt/venv/bin/junit2html /usr/local/bin/
 
 # Get and install the CMake
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.sh \

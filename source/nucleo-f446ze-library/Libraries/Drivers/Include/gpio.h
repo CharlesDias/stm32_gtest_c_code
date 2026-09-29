@@ -26,7 +26,7 @@ typedef enum
 
 
 /**
- * @struct A structure to represent the GPIO pin.
+ * @brief A structure to represent the GPIO pin.
  */
 typedef struct Gpio
 {

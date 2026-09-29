@@ -1,3 +1,7 @@
+# These targets are commands, not files: without this, an existing build/
+# folder makes "make build" think it is up to date and skip the build.
+.PHONY: all build test coverage cppcheck doxygen gtest_report dependency clean
+
 all: build
 	@echo ""
 	@echo "Done!"
@@ -14,7 +18,7 @@ test: build
 	@echo ""
 
 coverage:
-	@echo "-------------------- Build Coverage--------------------------"
+	@echo "-------------------- Build Coverage ----------------------"
 	cmake -DENABLE_COVERAGE=ON -S . -B build
 	cmake --build build --config Debug --target coverage -j4
 	@echo ""
@@ -49,24 +53,23 @@ cppcheck:
 	@echo ""
 
 doxygen: build
-	@echo "-------------------- Build Coverage--------------------------"
+	@echo "-------------------- Build Doxygen documentation ---------"
 	cmake --build build --config Debug --target docs -j4
 	@echo ""
 
-gtest_report:
-	cd build-artifacts/gtest_report && xsltproc gtest2html.xslt out/*.xml > gtest_report.html
-	# cd report && xsltproc gtest2html.xslt *.xml > gtest_report.html
-	# cd report && xsltproc test.xslt *.xml > gtest_report.html
-	# cd report && xsltproc newgtest2html.xsl *.xml > gtest_report.html
-# Don't work!!!!
-# report:
-# 	@echo "-------------------- Coverage Report ---------------------"
-# 	lcov --capture --directory build/coverage --output-file coverage.info
-# 	genhtml coverage.info --output-directory test/
-# 	@echo ""
+# Test report: ctest writes the results as JUnit XML and junit2html turns them
+# into an HTML page. The page is created even when a test fails, and the target
+# still fails in that case.
+gtest_report: build
+	@echo "-------------------- Create Google Test report -----------"
+	cd build && ctest --output-junit gtest-report.xml; status=$$?; \
+		junit2html gtest-report.xml gtest-report.html && exit $$status
+	@echo ""
 
-dependency:
-	@echo "-------------------- Create Graph Dependecy --------------"
+# The graph leaves out Doxygen::doxygen, which isn't part of the test build
+dependency: build
+	@echo "-------------------- Create Dependency Graph -------------"
+	echo 'set(GRAPHVIZ_IGNORE_TARGETS "Doxygen::doxygen")' > build/CMakeGraphVizOptions.cmake
 	cd build && cmake .. --graphviz=graph.dot && dot -Tpng graph.dot -o graph_image.png
 	@echo ""
 
