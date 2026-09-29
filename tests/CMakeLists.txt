@@ -106,13 +106,24 @@ if (ENABLE_COVERAGE)
       ${MIDDLEWARE_UNIT_TEST}
       ${HELLO_UNIT_TEST}
       ${HELLO_INTEGRATION_TEST}
-   ) 
+   )
+
+   # lcov 2.x (Ubuntu 24.04) stops on issues that don't affect this report:
+   # GCC end-line mismatches in GoogleTest macros and exclude patterns that
+   # match no files. lcov 1.x doesn't know these error names, so only pass
+   # them to lcov 2.x.
+   execute_process(COMMAND ${LCOV_PATH} --version OUTPUT_VARIABLE LCOV_VERSION_OUTPUT)
+   string(REGEX MATCH "[0-9]+\\.[0-9]+" LCOV_VERSION "${LCOV_VERSION_OUTPUT}")
+   if (LCOV_VERSION VERSION_GREATER_EQUAL 2.0)
+      set(COVERAGE_LCOV_ARGS --ignore-errors mismatch,unused)
+   endif()
 
    setup_target_for_coverage_lcov(
       NAME ${COVERAGE_MAIN}
       EXECUTABLE ctest -j${PROCESSOR_COUNT}
       DEPENDENCIES ${COVERAGE_DEPENDENCIES}
       EXCLUDE  ${COVERAGE_EXCLUDES}
+      LCOV_ARGS ${COVERAGE_LCOV_ARGS}
    )
 
 endif()

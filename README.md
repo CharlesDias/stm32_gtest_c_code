@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/CharlesDias/stm32_gtest_c_code/branch/main/graph/badge.svg)](https://codecov.io/gh/CharlesDias/stm32_gtest_c_code)
 [![Lizard](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/lizard.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/lizard.yml)
 [![Flawfinder](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/flawfinder.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/flawfinder.yml)
+[![Cppcheck](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/CharlesDias/stm32_gtest_c_code/actions/workflows/cppcheck.yml)
 
 This is a sample project for testing C code for STM32 microcontrollers using the Google Test Framework. Some topics covered:
 
@@ -17,7 +18,7 @@ This is a sample project for testing C code for STM32 microcontrollers using the
 * Testing C code via Google Test Framework.
 * Use GMock for mocking the STM32 HAL functions.
 * Code coverage with Github Actions and [Codecov](https://codecov.io).
-* Code quality analysis with Lizard and Flawfinder tools.
+* Code quality analysis with Lizard, Flawfinder, and Cppcheck (with the MISRA C:2012 addon) tools.
 * Assert verification and prints the failures via huart3.
 * Use of Docker container.
 
@@ -135,6 +136,16 @@ make clean && make build && make test
 ```
 
 Access the `build/coverage/index.html` file to see the coverage report.
+
+### Static analysis with Cppcheck
+
+To check the library code with Cppcheck and its MISRA C:2012 addon, run the command below inside the Docker container:
+
+```console
+make cppcheck
+```
+
+Check the file build/cppcheck-report.txt.
 
 ### Dependency graph
 
